@@ -26,7 +26,7 @@ public class MainForm extends JDialog {
     public MainForm(JFrame parent) {
         super(parent);
         setTitle("Gestion des utilisateurs");
-        setMinimumSize(new Dimension(500, 500));
+        setMinimumSize(new Dimension(600, 600));
         setContentPane(jpMain);
         listUsers.setVisible(false);
         setLocationRelativeTo(parent);
@@ -138,7 +138,6 @@ public class MainForm extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         // Mise à jour de l'utilisateur
         User updatedUser = Request.updateUser(existingUser, nom, prenom, email, password);
 
@@ -157,16 +156,23 @@ public class MainForm extends JDialog {
     public void showAllUsers() {
 
         List<User> users =  Request.getAllUser();
+
         listUsers.setText("");
 
-        for(User user : users) {
-            listUsers.append(user.getId() + " ");
-            listUsers.append(user.getNom() + " ");
-            listUsers.append(user.getPrenom() + " ");
-            listUsers.append(user.getEmail() + "\n");
-        }
+        if (users.isEmpty()) {
+            listUsers.setForeground(Color.RED);
+            listUsers.append("Aucun utilisateur trouvé en BDD.\n");
+        } else {
 
-        // rendre visible ?
+            listUsers.setForeground(Color.BLACK);
+            for(User user : users) {
+                listUsers.append(user.getId() + " ");
+                listUsers.append(user.getNom() + " ");
+                listUsers.append(user.getPrenom() + " ");
+                listUsers.append(user.getEmail() + "\n");
+            }
+        }
+        // je rend le machin visible
         listUsers.setVisible(true);
     }
 }
