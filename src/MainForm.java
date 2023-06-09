@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class MainForm extends JDialog {
     private JLabel jlTitre;
@@ -19,6 +20,7 @@ public class MainForm extends JDialog {
     private JPasswordField pfVerify;
     private JLabel jlVerify;
     private JButton btUpdate;
+    private JButton showUser;
 
     public MainForm(JFrame parent) {
         super(parent);
@@ -42,16 +44,17 @@ public class MainForm extends JDialog {
                 dispose();
             }
         });
-        btUpdate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("clic sur update");
-            }
-        });
+
         btUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 update();
+            }
+        });
+        showUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showAllUsers();
             }
         });
     }
@@ -120,12 +123,10 @@ public class MainForm extends JDialog {
         String password = String.valueOf(pfPwd.getPassword());
         String verify = String.valueOf(pfVerify.getPassword());
 
-        // vérification si les champs sont bien remplis
         if(!elVerificatiõn(nom, prenom, email, password, verify)){
             return;
         }
 
-        // Recherche l'utilisateur existant
         User existingUser = Request.getUserByMail(new User(nom, prenom, email, password));
 
         if (existingUser == null) {
@@ -147,8 +148,28 @@ public class MainForm extends JDialog {
         } else {
             JOptionPane.showMessageDialog(this,
                     "Erreur lors de la mise à jour du compte :( ",
-                    "Erreur",
+                    "Erreur ",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public void showAllUsers() {
+
+        List<User> users =  Request.getAllUser();
+        // stringBuilder
+        StringBuilder ligne = new StringBuilder();
+
+        for(User user : users) {
+            ligne.append(user.getId());
+            ligne.append(user.getNom());
+            ligne.append(user.getPrenom());
+            ligne.append(user.getEmail());
+
+        }
+
+        // test dans un autre panel
+        JOptionPane.showMessageDialog(this,
+                ligne.toString(),
+                "Liste de tous les utilisateurs",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }
