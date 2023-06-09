@@ -21,12 +21,14 @@ public class MainForm extends JDialog {
     private JLabel jlVerify;
     private JButton btUpdate;
     private JButton showUser;
+    private JTextArea listUsers;
 
     public MainForm(JFrame parent) {
         super(parent);
         setTitle("Gestion des utilisateurs");
         setMinimumSize(new Dimension(500, 500));
         setContentPane(jpMain);
+        listUsers.setVisible(false);
         setLocationRelativeTo(parent);
         setModal(false);
         setVisible(true);
@@ -155,21 +157,16 @@ public class MainForm extends JDialog {
     public void showAllUsers() {
 
         List<User> users =  Request.getAllUser();
-        // stringBuilder
-        StringBuilder ligne = new StringBuilder();
+        listUsers.setText("");
 
         for(User user : users) {
-            ligne.append(user.getId());
-            ligne.append(user.getNom());
-            ligne.append(user.getPrenom());
-            ligne.append(user.getEmail());
-
+            listUsers.append(user.getId() + " ");
+            listUsers.append(user.getNom() + " ");
+            listUsers.append(user.getPrenom() + " ");
+            listUsers.append(user.getEmail() + "\n");
         }
 
-        // test dans un autre panel
-        JOptionPane.showMessageDialog(this,
-                ligne.toString(),
-                "Liste de tous les utilisateurs",
-                JOptionPane.INFORMATION_MESSAGE);
+        // rendre visible ?
+        listUsers.setVisible(true);
     }
 }
